@@ -1,0 +1,9 @@
+grafana:
+  enabled: true
+  persistence:
+    enabled: false
+
+prometheus:
+  prometheusSpec:
+    retention: 12h
+    storageSpec: null

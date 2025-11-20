@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: security-plane
+  labels:
+    plan: security
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability-plane
+  labels:
+    plan: observability
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: platform-plane
+  labels:
+    plan: platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sandbox-plane
+  labels:
+    plan: sandbox
