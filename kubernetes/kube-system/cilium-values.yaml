@@ -1,0 +1,16 @@
+cluster:
+  name: mininfra
+kubeProxyReplacement: false # Can be partial after
+ipam:
+  # For kind cluster
+  mode: kubernetes
+gatewayAPI: # We will use Kong
+  enabled: false
+hubble: # Cilium provided UI - not strictly needed for this series of articles
+  enabled: true
+  relay:
+    enabled: true
+  ui:
+    enabled: true
+operator:
+  replicas: 1

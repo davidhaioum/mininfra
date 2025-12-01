@@ -23,6 +23,6 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: sandbox-plane
+  name: apps-plane
   labels:
-    plan: sandbox
+    plan: apps

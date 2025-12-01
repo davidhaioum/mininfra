@@ -1,0 +1,18 @@
+---
+apiVersion: apisix.apache.org/v1alpha1
+kind: GatewayProxy
+metadata:
+  name: apisix-config
+  namespace: platform-plane
+spec:
+  provider:
+    type: ControlPlane
+    controlPlane:
+      endpoints:
+        # This must point to the APISIX admin service inside the cluster.
+        # With the Helm chart, the default admin service name is usually "apisix-admin".
+        - http://apisix-admin.platform-plane.svc:9180
+      auth:
+        type: AdminKey
+        adminKey:
+          value: edd1c9f034335f136f87ad84b625c8f1

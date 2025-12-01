@@ -1,0 +1,104 @@
+---
+image:
+  # Keep the default repo, just here as a reminder
+  repository: apache/apisix
+  tag: 3.14.1-ubuntu
+
+# We keep a single replica, no DaemonSet, no HPA for local dev
+useDaemonSet: false
+replicaCount: 1
+
+service:
+  # Expose APISIX via NodePort so you can reach it from your laptop
+  type: NodePort
+  externalTrafficPolicy: Cluster
+
+  http:
+    enabled: true
+    nodePort: 30080  # Fixed NodePort for HTTP
+    servicePort: 80    # Cluster-internal port for HTTP
+    containerPort: 9080  # APISIX default HTTP port
+
+  # We keep TLS disabled for now (you can wire it later if needed)
+  tls:
+    servicePort: 443
+    # nodePort: 30443  # You can uncomment and fix this later if you want HTTPS via NodePort
+
+stream:
+  enabled: false
+
+apisix:
+  # Deployment mode: default is already "traditional"/"etcd", we just make it explicit
+  deployment:
+    mode: traditional
+    role: "traditional"
+    role_traditional:
+      config_provider: "etcd"
+
+  # Admin API (internal only, but useful for debugging)
+  admin:
+    enabled: true
+    # http://127.0.0.1:9180/ui/
+    enable_admin_ui: true
+    type: ClusterIP
+
+    ip: 0.0.0.0
+    port: 9180
+    servicePort: 9180
+
+    # Use default admin credentials (you can change if you expose it)
+    credentials:
+      admin: edd1c9f034335f136f87ad84b625c8f1
+      viewer: 4054f7cf07e344346cd3f287985e76a2
+      secretName: ""
+      secretAdminKey: ""
+      secretViewerKey: ""
+
+    allow:
+      # Only allow localhost to reach the admin service (good for port-forward)
+      ipList:
+        - 127.0.0.1/24
+
+    ingress:
+      enabled: false
+
+  # Logging / nginx basics: keep defaults, but we can keep them explicit
+  nginx:
+    workerRlimitNofile: "20480"
+    workerConnections: "10620"
+    workerProcesses: auto
+    enableCPUAffinity: true
+
+    logs:
+      enableAccessLog: true
+      accessLog: "/dev/stdout"
+      errorLog: "/dev/stderr"
+      errorLogLevel: "warn"
+
+  # SSL disabled for now (we focus on plain HTTP for local tests)
+  ssl:
+    enabled: false
+    containerPort: 9443
+
+  # DNS + plugins left to defaults
+  plugins: []
+  stream_plugins: []
+  pluginAttrs: {}
+
+# Built-in etcd: keep enabled for local dev (simplest setup)
+etcd:
+  enabled: true
+  prefix: "/apisix"
+  timeout: 30
+
+# We don’t use the embedded ingress-controller in this chart,
+# because you already have a separate apisix-ingress-controller deployment.
+ingress-controller:
+  enabled: false
+
+# No extra RBAC, no extra volumes, keep chart very light
+rbac:
+  create: false
+
+serviceAccount:
+  create: false

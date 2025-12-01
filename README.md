@@ -7,9 +7,9 @@ A local, opinionated, single-cluster Kubernetes lab designed to simulate a small
 - **Platform plane** – GitOps, workflows, developer portal, registry
 - **Sandbox plane** – application workloads, messaging, autoscaling, database, gateway
 
-Everything runs on **one k3d (K3s) cluster** on a Mac, using **Cilium** as CNI and **Gateway API** (via Kong) as the entry point.
+Everything runs on **one kind cluster** on a Mac, using **Cilium** as CNI and **Gateway API** (via Kong) as the entry point.
 
-> This is a *learning / homelab* setup – not production, but conceptually close to how real platforms are built.
+> This is a *learning / homelab* setup – not production, but conceptually close to how a real platform could be built to my humble opinion.
 
 ---
 
@@ -51,7 +51,6 @@ Cilium is used as the CNI in the cluster, and we can later add NetworkPolicies t
 
 You need the following tools installed on your Mac:
 
-- [k3d](https://k3d.io/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [Helm](https://helm.sh/)
 

@@ -1,0 +1,79 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: mininfra
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.34.0
+    extraMounts:
+      - hostPath: /etc/ssl/certs/ca-certificates.crt
+        containerPath: /etc/ssl/certs/ca-certificates.crt
+        readOnly: true
+    extraPortMappings:
+      # ── Gateway ─────────────────────────────
+      # HTTP entry for your apps via Gateway API
+      - containerPort: 30080
+        hostPort: 30080
+        protocol: TCP
+      # HTTPS entry (when you enable TLS later)
+      - containerPort: 30443
+        hostPort: 30443
+        protocol: TCP
+
+      # ── Platform plane ─────────────────────────────────────────────
+      # Argo CD server (internal 8080) → Argo UI
+      - containerPort: 8080
+        hostPort: 31080
+        protocol: TCP
+
+      # ── Observability plane ────────────────────────────────────────
+      # Grafana UI (usually port 3000)
+      - containerPort: 3000
+        hostPort: 30300
+        protocol: TCP
+
+      # Prometheus UI (port 9090)
+      - containerPort: 9090
+        hostPort: 30090
+        protocol: TCP
+
+      # ── Security plane ─────────────────────────────────────────────
+      # Vault UI (port 8200)
+      - containerPort: 8200
+        hostPort: 38200
+        protocol: TCP
+
+      # Keycloak admin UI (we’ll expose it on 8081 to avoid clash with Argo)
+      - containerPort: 8081
+        hostPort: 31801
+        protocol: TCP
+
+      # ── CNPG / Postgres (optional, for local dev & migrations) ─────
+      - containerPort: 5432
+        hostPort: 35432
+        protocol: TCP
+
+      # ── NATS monitoring UI (optional if you enable it) ─────────────
+      # Typical NATS monitoring port is 8222
+      - containerPort: 8222
+        hostPort: 38222
+        protocol: TCP
+
+      # ── Cilium Hubble ──────────────────────────────────────────────
+      # Hubble UI (we’ll use 12000 inside the cluster)
+      - containerPort: 12000
+        hostPort: 31200
+        protocol: TCP
+
+      # Hubble gRPC (relay) – often 4244
+      - containerPort: 4244
+        hostPort: 31244
+        protocol: TCP
+  - role: worker
+    image: kindest/node:v1.34.0
+    extraMounts:
+      - hostPath: /etc/ssl/certs/ca-certificates.crt
+        containerPath: /etc/ssl/certs/ca-certificates.crt
+        readOnly: true
+#- role: worker
+networking:
+  disableDefaultCNI: true # needed for Cillium
