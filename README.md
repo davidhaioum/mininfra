@@ -45,6 +45,8 @@ All components are deployed into a **single Kubernetes cluster** called `Mininfr
 
 Cilium is used as the CNI in the cluster, and we can later add NetworkPolicies to isolate planes.
 
+![architecture](docs/diagrams/mininfra.png)
+
 ---
 
 ## Requirements
