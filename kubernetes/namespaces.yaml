@@ -26,3 +26,10 @@ metadata:
   name: apps-plane
   labels:
     plan: apps
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: delivery-plane
+  labels:
+    plan: delivery

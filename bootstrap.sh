@@ -10,15 +10,27 @@ colima ssh -p mininfra -- sudo service docker restart
 
 kind create cluster --config kind-config.yaml
 
+kubectx kind-mininfra
+
 cilium install --version 1.18.4 --helm-values kubernetes/kube-system/cilium-values.yaml
 
 kubectl apply -f kubernetes/namespaces.yaml
 
 kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
 
+# Platform Plane
 helm upgrade --install apisix apisix/apisix \
   --namespace platform-plane \
   --values planes/platform-plane/charts/values-apisix.yaml
 
 kubectl apply -f planes/platform-plane/
+
+# Apps plane
 kubectl apply -f planes/apps-plane/
+
+# Delivery Plane
+
+helm upgrade --install forgejo oci://code.forgejo.org/forgejo-helm/forgejo \
+  --namespace delivery-plane \
+  --version 16.0.2 \
+  --values planes/delivery-plane/charts/values-forgejio.yaml
