@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: delivery-plane
+resources:
+  - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+
+patches:
+  - patch: |-
+      - op: replace
+        path: /subjects/0/namespace
+        value: delivery-plane
+    target:
+      kind: ClusterRoleBinding

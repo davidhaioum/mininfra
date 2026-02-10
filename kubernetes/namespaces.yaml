@@ -33,3 +33,10 @@ metadata:
   name: delivery-plane
   labels:
     plan: delivery
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: data-plane
+  labels:
+    plan: data

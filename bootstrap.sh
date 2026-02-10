@@ -34,3 +34,17 @@ helm upgrade --install forgejo oci://code.forgejo.org/forgejo-helm/forgejo \
   --namespace delivery-plane \
   --version 16.0.2 \
   --values planes/delivery-plane/charts/values-forgejio.yaml
+
+# Data plane
+
+helm repo add cnpg https://cloudnative-pg.github.io/charts
+helm upgrade --install cnpg \
+  --namespace data-plane \
+  --version 0.27.1 \
+  cnpg/cloudnative-pg \
+  --values planes/data-plane/charts/values-cnpg.yaml
+
+#helm upgrade --install valkey-operator \
+#  --namespace data-plane \
+#  oci://ghcr.io/hyperspike/valkey-operator \
+#  --version v0.0.61-chart
