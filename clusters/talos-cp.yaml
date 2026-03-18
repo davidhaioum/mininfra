@@ -1,0 +1,12 @@
+# talos-cp.yaml
+arch: "aarch64"
+images:
+  - location: "https://github.com/siderolabs/talos/releases/download/v1.9.0/talos-v1.9.0-metal-arm64.iso"
+    arch: "aarch64"
+cpus: 2
+memory: "2GiB"
+mounts: []
+containerd:
+  system: false
+  user: false
+disk: "10GiB"
